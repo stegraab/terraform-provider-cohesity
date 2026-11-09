@@ -64,7 +64,7 @@ func jobStartStopUtil(resourceData *schema.ResourceData, configMetaData interfac
 	client, err := CohesityManagementSdk.NewCohesitySdkClient(cohesityConfig.ClusterVIP,
 		cohesityConfig.ClusterUsername, cohesityConfig.ClusterPassword, cohesityConfig.ClusterDomain)
 	if err != nil {
-		log.Printf(err.Error())
+		log.Print(err.Error())
 		return nil, diag.Errorf("Failed to authenticate with Cohesity")
 	}
 	jobName := resourceData.Get("name").(string)
@@ -74,7 +74,7 @@ func jobStartStopUtil(resourceData *schema.ResourceData, configMetaData interfac
 	protectionJob, err := client.ProtectionJobs().GetProtectionJobs(nil, []string{jobName}, nil,
 		nil, nil, nil, nil, nil, nil, nil, nil, nil, nil)
 	if err != nil {
-		log.Printf(err.Error())
+		log.Print(err.Error())
 		return nil, diag.Errorf("Failed to find the protection job")
 	}
 	jobID := *protectionJob[0].Id
@@ -83,7 +83,7 @@ func jobStartStopUtil(resourceData *schema.ResourceData, configMetaData interfac
 	response, err := client.ProtectionRuns().
 		GetProtectionRuns(&jobID, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil)
 	if err != nil {
-		log.Printf(err.Error())
+		log.Print(err.Error())
 		return nil, diag.Errorf("Failed to get the protection job runs")
 	}
 	//start or stop the job run and wait for completion or operation timeout
@@ -105,7 +105,7 @@ func jobStartStopUtil(resourceData *schema.ResourceData, configMetaData interfac
 			err = client.ProtectionJobs().CreateRunProtectionJob(jobID, &requestParams)
 			time.Sleep(5 * time.Second)
 			if err != nil {
-				log.Printf(err.Error())
+				log.Print(err.Error())
 				return nil, diag.Errorf("Failed to run the protection job")
 			}
 		}
@@ -132,7 +132,7 @@ func jobStartStopUtil(resourceData *schema.ResourceData, configMetaData interfac
 		cancelJobRunParams.JobRunId = response[0].BackupRun.JobRunId
 		err = client.ProtectionRuns().CreateCancelProtectionJobRun(jobID, &cancelJobRunParams)
 		if err != nil {
-			log.Printf(err.Error())
+			log.Print(err.Error())
 			return nil, diag.Errorf("Failed to stop the protection job run")
 		}
 		for timeout > 0 {

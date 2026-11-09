@@ -7,8 +7,8 @@ import (
 	"testing"
 
 	CohesityManagementSdk "github.com/cohesity/management-sdk-go/managementsdk"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 	"github.com/terraform-providers/terraform-provider-cohesity/cohesity/utils"
 )
 
@@ -37,7 +37,7 @@ func testAccCheckJobRunCreated() resource.TestCheckFunc {
 		client, err := CohesityManagementSdk.NewCohesitySdkClient(cohesityConfig.ClusterVIP,
 			cohesityConfig.ClusterUsername, cohesityConfig.ClusterPassword, cohesityConfig.ClusterDomain)
 		if err != nil {
-			log.Printf(err.Error())
+			log.Print(err.Error())
 			return errors.New("Failed to authenticate with Cohesity")
 		}
 		jobName := vmWareJobName
@@ -46,7 +46,7 @@ func testAccCheckJobRunCreated() resource.TestCheckFunc {
 		protectionJob, err := client.ProtectionJobs().GetProtectionJobs(nil, []string{jobName}, nil,
 			nil, nil, nil, nil, nil, nil, nil, nil, nil, nil)
 		if err != nil {
-			log.Printf(err.Error())
+			log.Print(err.Error())
 			return errors.New("Failed to find the protection job")
 		}
 		jobID := *protectionJob[0].Id
