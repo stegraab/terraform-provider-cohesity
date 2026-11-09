@@ -1,3 +1,25 @@
+# Stegra Cohesity provider fork
+
+Stegra maintains this fork of `cohesity/terraform-provider-cohesity` for HTTPS
+certificate management alongside the upstream resources. The provider release
+address is `stegraab/cohesity`.
+
+Certificate management uses API-key authentication, validates the certificate
+chain and hostname before upload, and accepts ephemeral private keys through
+`private_key_pem_wo` (Terraform 1.11+). `restart_iris = true` enables an Iris-only
+reload after certificate changes. Removing the resource retains the certificate.
+See [the certificate resource](docs/resources/web_server_certificate.md).
+
+The manual release workflow builds `main`, chooses the highest included upstream
+stable release, and adds the next `-stegra.N` suffix. It signs SHA256 checksums
+with `GPG_PRIVATE_KEY` and optional `PASSPHRASE` repository secrets, then publishes
+release assets for the Terraform Registry. Releases are explicit; pushes and
+upstream tags do not publish automatically. Upstream updates are reviewed and
+merged into `main` before release. The dedicated [release signing public key](release-signing-key.asc)
+has fingerprint `3537715453526F7559135BD8608AD9D4CAAE8847`.
+
+---
+
 # Terraform Provider for Cohesity
 
 - Website: https://www.terraform.io

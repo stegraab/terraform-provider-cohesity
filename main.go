@@ -10,6 +10,11 @@ import (
 	"github.com/terraform-providers/terraform-provider-cohesity/cohesity"
 )
 
+var (
+	version = "dev"
+	commit  = "none"
+)
+
 func main() {
 	plugin.Serve(&plugin.ServeOpts{
 		ProviderFunc: cohesity.Provider})
